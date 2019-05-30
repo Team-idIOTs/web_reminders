@@ -1,7 +1,7 @@
 import pyrebase
 import sys, os
 import json
-sys.path.append(os.getcwd() + "/../dp_lib/")
+sys.path.append(os.getcwd() + "/../reminders_lib/")
 sys.path.append(os.getcwd() + "/../")
 from Task import *
 from config import *
@@ -13,6 +13,12 @@ firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 task.to_firebase(db)
 
+task.add_reminder([7, 30], ['THU'], end_time=[17, 0], interval=[0, 30])
+task.to_firebase(db)
+
+
+task.update_reminder(1, days=['THU', 'SUN'])
+task.to_firebase(db)
 tasks = db.get()
-for stuff in tasks.each():
-    task = Task.from_dict(stuff.val())
+for curr_task in tasks.each():
+    task = Task.from_dict(curr_task.val())
